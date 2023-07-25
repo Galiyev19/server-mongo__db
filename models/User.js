@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema(
   {
+    userName: {
+      type: String,
+      required: true
+    },
     email: {
       type: String,
       required: true,
@@ -11,6 +15,12 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    movieList: {
+      type: Array,
+      required: true
+    },
+    avatarUrl: String,
+    movieList: Array,
   },
   {
     timestamps: true,

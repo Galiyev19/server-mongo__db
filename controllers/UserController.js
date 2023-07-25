@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import { validationResult } from "express-validator";
 
 import UserModel from "../models/User.js";
+import { json } from "express";
 
 export const register = async (req, res) => {
   try {
@@ -17,8 +18,10 @@ export const register = async (req, res) => {
     const hash = await bcrypt.hash(password, salt);
 
     const doc = new UserModel({
+      userName: req.body.username,
       email: req.body.email,
       passwordHash: hash,
+      avatarUrl: req.body.avatarUrl,
     });
 
     const user = await doc.save();
@@ -49,11 +52,12 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
+
     const user = await UserModel.findOne({ email: req.body.email });
 
     if (!user) {
       return res.status(404).json({
-        message: "Неверный логин или пароль",
+        message: "Wrong login or password",
       });
     }
 
@@ -64,7 +68,7 @@ export const login = async (req, res) => {
 
     if (!isValidPass) {
       return res.status(400).json({
-        message: "Неверный логин или пароль",
+        message: "Wrong login or password",
       });
     }
 
@@ -113,3 +117,36 @@ export const getUser = async (req, res) => {
     });
   }
 };
+
+
+export const getUserById = async (req,res) => {
+  try{
+    const userId = req.params.id;
+    const user = await UserModel.findByIdAndUpdate({_id: userId},{
+      $push: {movieList: req.body.body}
+    })
+    // console.log(req.body.body)
+    res.json(user)
+    // console.log(user)
+  }catch(e){
+    console.log(e)
+    return res.status(500).json({
+      message: "Failed to add item"
+    })
+  }
+}
+
+export const deleteItemFromListUser = async (req,res) => {
+  try{
+    const userId = req.params.id;
+    const user = await UserModel.findByIdAndUpdate({_id: userId},{
+      $pull: { movieList: {  id: req.body.body}}
+    })
+    console.log(req.body.body)
+    res.json(user)
+  }catch(e){
+    return res.status(500).json({
+      message: "Failed to delete item"
+    })
+  }
+}
