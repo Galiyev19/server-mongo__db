@@ -4,6 +4,7 @@ import { validationResult } from "express-validator";
 
 import UserModel from "../models/User.js";
 import { json } from "express";
+import User from "../models/User.js";
 
 export const register = async (req, res) => {
   try {
@@ -72,6 +73,7 @@ export const login = async (req, res) => {
       });
     }
 
+    console.log(user)
     const token = jwt.sign(
       {
         _id: user._id,
@@ -111,6 +113,7 @@ export const getUser = async (req, res) => {
     res.json({
       ...userData,
     });
+
   } catch (error) {
     return res.status(500).json({
       message: "Нет доступа ",
@@ -119,15 +122,32 @@ export const getUser = async (req, res) => {
 };
 
 
-export const getUserById = async (req,res) => {
+export const addUserItemMovieList = async (req,res) => {
   try{
     const userId = req.params.id;
-    const user = await UserModel.findByIdAndUpdate({_id: userId},{
-      $push: {movieList: req.body.body}
-    })
-    // console.log(req.body.body)
-    res.json(user)
-    // console.log(user)
+    const user = await UserModel.findByIdAndUpdate(
+      {
+        _id: userId
+      },
+      {
+      $push: {
+        movieList: req.body.body
+      }
+    },
+    {
+      returnDocument: "after"
+    });
+
+    if(!user){
+      return res.status(404).json({
+        message: "User not found"
+      })
+    }
+
+    console.log(req.body.body);
+
+    res.json(user);
+    // console.log(user);
   }catch(e){
     console.log(e)
     return res.status(500).json({
@@ -142,11 +162,66 @@ export const deleteItemFromListUser = async (req,res) => {
     const user = await UserModel.findByIdAndUpdate({_id: userId},{
       $pull: { movieList: {  id: req.body.body}}
     })
-    console.log(req.body.body)
-    res.json(user)
+
+    if(!user){
+      return res.json({
+        message: "User not found"
+      })
+    }
+
+    // console.log(req.body.body)
+    res.json({
+      success: true
+    })
   }catch(e){
     return res.status(500).json({
       message: "Failed to delete item"
+    })
+  }
+}
+
+export const userMovieList = async (req,res) => {
+  try{
+    const userId = req.params.id;
+    const user = await UserModel.findById({_id: userId});
+
+    if(!user){
+      return res.json({
+        message: "User not found"
+      })
+    }
+    
+    res.json(user.movieList)
+
+  }catch(error){
+    return res.status(500).json({
+      message: "Movie not found"
+    })
+  }
+}
+
+
+export const UploadUserImage = async (req,res) => {
+  try{
+    const userId = req.params.id;
+    const user = await UserModel.findByIdAndUpdate({_id: userId},{
+      avatarUrl: req.file.originalname
+    })
+
+    console.log(req.file)
+
+    if(!user){
+      return res.json({
+        message: "User not found"
+      })
+    }
+
+    res.json({
+      success: true
+    })
+  }catch(error){
+    return res.status(500).json({
+      message: "Failed to upload image"
     })
   }
 }

@@ -20,7 +20,10 @@ const UserSchema = new mongoose.Schema(
       required: true
     },
     avatarUrl: String,
-    movieList: Array,
+    movieList: {
+      type: Array,
+      unique: true
+    },
   },
   {
     timestamps: true,
