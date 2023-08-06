@@ -12,7 +12,7 @@ import User from "./models/User.js";
 mongoose.set('strictQuery', true)
 
 mongoose
-  .connect('mongodb+srv://galiyevalisher7:wwwwww@cluster0.kmz2lln.mongodb.net/users?retryWrites=true&w=majority')
+  .connect(process.env.MONGODB_URL)
   .then(() => console.log("Connect DB"))
   .catch((err) => console.log(err));
 
