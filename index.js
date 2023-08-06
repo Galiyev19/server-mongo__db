@@ -44,9 +44,7 @@ app.patch("/deleteMovie/:id", UserController.deleteItemFromListUser)
 app.get("/getMovie/:id",UserController.userMovieList)
 
 
-app.get("/",(res,req) => {
-  res.send("HELLO WORLD")
-})
+
 app.listen(process.env.PORT || 4444, (err) => {
   if (err) {
     return console.log(err);
