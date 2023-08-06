@@ -9,6 +9,8 @@ import checkAuth from "./utils/checkAuth.js";
 import * as UserController from "./controllers/UserController.js";
 import User from "./models/User.js";
 
+mongoose.set('strictQuery', true)
+
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => console.log("Connect DB"))
