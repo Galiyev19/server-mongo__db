@@ -10,7 +10,7 @@ import * as UserController from "./controllers/UserController.js";
 import User from "./models/User.js";
 
 mongoose
-  .connect(process.env.MONGODB_URL)
+  .connect(process.env.MONGODB_URI)
   .then(() => console.log("Connect DB"))
   .catch((err) => console.log(err));
 
