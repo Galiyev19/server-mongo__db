@@ -10,9 +10,7 @@ import * as UserController from "./controllers/UserController.js";
 import User from "./models/User.js";
 
 mongoose
-  .connect(
-    "mongodb+srv://galiyevalisher7:wwwwww@cluster0.kmz2lln.mongodb.net/users"
-  )
+  .connect('mongodb+srv://galiyevalisher7:wwwwww@cluster0.kmz2lln.mongodb.net/users')
   .then(() => console.log("Connect DB"))
   .catch((err) => console.log(err));
 
@@ -46,10 +44,13 @@ app.patch("/deleteMovie/:id", UserController.deleteItemFromListUser)
 app.get("/getMovie/:id",UserController.userMovieList)
 
 
-app.listen(4444, (err) => {
+app.get("/",(res,req) => {
+  res.send("HELLO WORLD")
+})
+app.listen(process.env.PORT || 4444, (err) => {
   if (err) {
     return console.log(err);
-  }
-
+  } 
+  
   console.log("Server OK");
 });
