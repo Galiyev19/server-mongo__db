@@ -4,6 +4,7 @@ import { registerValidation } from "./validations/auth.js";
 import cors from 'cors'
 import multer from "multer";
 import * as dotenv from 'dotenv'
+import connectDB from "./mongodb/connect.js";
 
 import checkAuth from "./utils/checkAuth.js";
 
@@ -54,10 +55,15 @@ app.get("/getMovie/:id",UserController.userMovieList)
 
 
 const PORT = process.env.PORT
-app.listen(PORT, (err) => {
-  if (err) {
-    return console.log(err);
-  } 
-  
-  console.log("Server started");
-});
+
+const startServer = async () => {
+  try{
+    connectDB(process.env.MONGODB_URL)
+    app.listen(PORT, () => { console.log("Server started " + PORT);});
+
+  }catch(error){
+    console.log(error)
+  }
+}
+
+startServer()
