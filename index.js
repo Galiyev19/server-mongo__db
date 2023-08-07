@@ -10,16 +10,17 @@ import checkAuth from "./utils/checkAuth.js";
 import * as UserController from "./controllers/UserController.js";
 import User from "./models/User.js";
 
+const app = express();
 
 dotenv.config()
-
+app.use(express.json());
+app.use(cors())
 
 mongoose.set('strictQuery', true)
   .connect(process.env.MONGODB_URL)
   .then(() => console.log("Connect DB"))
   .catch((err) => console.log(err));
 
-const app = express();
 
 const storage = multer.diskStorage({
   destination: (_, __, cb) => {
@@ -33,8 +34,10 @@ const storage = multer.diskStorage({
 const upload = multer({storage})
 app.use('/uploads',express.static('uploads'));
 
-app.use(express.json());
-app.use(cors())
+
+app.get('/',(req,res) => {
+  res.send({message: "HELLO"})
+})
 
 app.post("/sign-in", UserController.login);
 app.post("/sign-up", registerValidation, UserController.register);
@@ -50,10 +53,10 @@ app.get("/getMovie/:id",UserController.userMovieList)
 
 
 
-app.listen(process.env.PORT || 4444, (err) => {
+app.listen(8080, (err) => {
   if (err) {
     return console.log(err);
   } 
   
-  console.log("Server OK");
+  console.log("Server started");
 });
