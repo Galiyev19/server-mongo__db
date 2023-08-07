@@ -14,6 +14,7 @@ const app = express();
 
 dotenv.config()
 app.use(express.json());
+app.use(cors())
 
 mongoose.set('strictQuery', true)
 .connect(process.env.MONGODB_URL)
@@ -30,7 +31,7 @@ const storage = multer.diskStorage({
   }
 })
 
-app.use(cors())
+
 const upload = multer({storage})
 app.use('/uploads',express.static('uploads'));
 
