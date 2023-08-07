@@ -14,8 +14,8 @@ const app = express();
 
 dotenv.config()
 app.use(express.json());
-app.use(cors())
 
+app.use(cors())
 mongoose.set('strictQuery', true)
 .connect(process.env.MONGODB_URL)
 .then(() => console.log("Connect DB"))
