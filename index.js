@@ -3,12 +3,15 @@ import mongoose from "mongoose";
 import { registerValidation } from "./validations/auth.js";
 import cors from 'cors'
 import multer from "multer";
+import * as dotenv from 'dotenv'
 
 import checkAuth from "./utils/checkAuth.js";
 
 import * as UserController from "./controllers/UserController.js";
 import User from "./models/User.js";
 
+
+dotenv.config()
 mongoose.set('strictQuery', true)
 
 mongoose
