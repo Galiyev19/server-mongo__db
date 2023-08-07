@@ -14,12 +14,11 @@ const app = express();
 
 dotenv.config()
 app.use(express.json());
-app.use(cors())
 
 mongoose.set('strictQuery', true)
-  .connect(process.env.MONGODB_URL)
-  .then(() => console.log("Connect DB"))
-  .catch((err) => console.log(err));
+.connect(process.env.MONGODB_URL)
+.then(() => console.log("Connect DB"))
+.catch((err) => console.log(err));
 
 
 const storage = multer.diskStorage({
@@ -31,6 +30,7 @@ const storage = multer.diskStorage({
   }
 })
 
+app.use(cors())
 const upload = multer({storage})
 app.use('/uploads',express.static('uploads'));
 
