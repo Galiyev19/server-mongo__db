@@ -12,9 +12,9 @@ import User from "./models/User.js";
 
 
 dotenv.config()
-mongoose.set('strictQuery', true)
 
-mongoose
+
+mongoose.set('strictQuery', true)
   .connect(process.env.MONGODB_URL)
   .then(() => console.log("Connect DB"))
   .catch((err) => console.log(err));
